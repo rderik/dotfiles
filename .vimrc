@@ -181,17 +181,18 @@ nnoremap <Leader>G :Goyo<CR>
 " ----------------------------------------------------------------------------
 " Autocommand {{{
 " ----------------------------------------------------------------------------
-
-augroup vimrc
+augroup nerd_loader
   autocmd!
-  " NERDtree config
   autocmd VimEnter * silent! autocmd! FileExplorer
   autocmd BufEnter,BufNew *
         \  if isdirectory(expand('<amatch>'))
         \|   call plug#load('nerdtree')
         \|   execute 'autocmd! nerd_loader'
         \| endif
-  " go config
+augroup END
+augroup vimrc
+  autocmd!
+ " go config
   autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
   autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
   autocmd FileType go nmap <leader>r  <Plug>(go-run)
