@@ -64,6 +64,8 @@ Plug 'dag/vim-fish'
 Plug 'kana/vim-textobj-user'
 " Ruby textobj
 Plug 'nelstrom/vim-textobj-rubyblock'
+" My potion plugin
+Plug 'rderik/potion'
 
 
 " All of your Plugins must be added before the following line
@@ -233,4 +235,16 @@ set ruler
 " fix to use clipboard on tmux
 set clipboard=unnamed
 filetype plugin indent on    " required
+let g:potion_command = "/Users/derik/Documents/Development/potion/potion/bin/potion"
+" ----------------------------------------------------------------------------
+" Readline-style key bindings in command-line (excerpt from rsi.vim)
+" ----------------------------------------------------------------------------
+cnoremap        <C-A> <Home>
+cnoremap        <C-B> <Left>
+cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
+cnoremap        <M-b> <S-Left>
+cnoremap        <M-f> <S-Right>
+silent! exe "set <S-Left>=\<Esc>b"
+silent! exe "set <S-Right>=\<Esc>f"
 " }}}
