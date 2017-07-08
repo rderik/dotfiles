@@ -325,7 +325,6 @@ set t_RV=
 " I'll use my home directory .vim to save the local configuration so the git
 " file stays clean
 let s:local_vimrc = $HOME.'/.vim/vimrc-extra'
-echom s:local_vimrc
 if filereadable(s:local_vimrc)
   execute 'source' s:local_vimrc
 endif
