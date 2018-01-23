@@ -16,6 +16,9 @@ if v:version >= 703
 endif
 " endwise.vim: wisely add 'end' in ruby, endfunction/endif/more in vim script,
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
 
 
 Plug 'ascenator/L9'
@@ -40,6 +43,8 @@ if s:darwin
     " Markdown Preview
     Plug 'junegunn/vim-xmark', { 'do': 'make' }
 endif
+" vimscrip test framework
+Plug 'junegunn/vader.vim'
 
 " Browsing - A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
@@ -71,6 +76,8 @@ Plug 'kana/vim-textobj-user'
 Plug 'nelstrom/vim-textobj-rubyblock'
 " My potion plugin
 Plug 'rderik/potion'
+" ALE for linters
+Plug 'w0rp/ale'
 
 " Session manager
 Plug 'xolox/vim-misc' " vim-session dependency
@@ -79,6 +86,7 @@ Plug 'xolox/vim-session'
 " Sent commands from vim to TMUX
 Plug 'sjl/tslime.vim'
 
+Plug 'mrtazz/simplenote.vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -111,7 +119,7 @@ colo seoul256-light
 " Switch
 set background=dark
 
-let mapleader = ","
+let mapleader = "\\"
 let maplocalleader = "\\"
 
 " NERDTree Map
@@ -137,9 +145,9 @@ let g:fzf_layout = { 'down': '~40%' }
 
 " EasyAlign configuration
 " Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
+xnoremap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
+nnoremap ga <Plug>(EasyAlign)
 
 " Limelight keymap
 nnoremap <Leader>l <Plug>(Limelight)
@@ -153,6 +161,43 @@ function! s:Insert_journal_date()
   let curr_date = strftime("%B %A %d, %Y")
   call append(".", [curr_date , "=================="])
 endfunction
+
+" test command for Vader
+function! s:vader_tests()
+  if expand('%:e') == 'vim'
+    let testfile = printf('%s/%s.vader', expand('%:p:h'),
+          \ tr(expand('%:p:h:t'), '-', '_'))
+    if !filereadable(testfile)
+      echoerr 'File does not exist: '. testfile
+      return
+    endif
+    source %
+    execute 'Vader' testfile
+  else
+    let sourcefile = printf('%s/%s.vim', expand('%:p:h'),
+          \ tr(expand('%:p:h:t'), '-', '_'))
+    if !filereadable(sourcefile)
+      echoerr 'File does not exist: '. sourcefile
+      return
+    endif
+    execute 'source' sourcefile
+    Vader
+  endif
+endfunction
+
+
+" Linter configuration
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+" This flag can be set to 0 to disable linting when the buffer is entered.
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_save = 0
+
+" SimpleNote
+let g:SimplenoteVertical=1
+
 " }}}
 
 " ----------------------------------------------------------------------------
@@ -230,6 +275,10 @@ augroup vimrc
 
   " Browsing - A vim plugin to display the indention levels with thin vertical lines
   autocmd! User indentLine doautocmd indentLine Syntax
+
+  " Set the command :Test for any .vader .vim file
+autocmd BufRead *.{vader,vim}
+      \ command! -buffer Test call s:vader_tests()
 augroup END
 " }}}
 
@@ -248,6 +297,7 @@ set history=1000
 set wildmenu
 set wildmode=list:longest
 set laststatus=2
+set incsearch
 " ctags
 set tags=./tags
 " shows row and column number at bottom right corner
@@ -289,8 +339,6 @@ cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
 cnoremap        <M-b> <S-Left>
 cnoremap        <M-f> <S-Right>
-silent! exe "set <S-Left>=\<Esc>b"
-silent! exe "set <S-Right>=\<Esc>f"
 " Mnemonic: Copy File path
 nnor <leader>cf :let @+=expand("%:p")<CR>
 " Mnemonic: Yank File path
@@ -311,6 +359,16 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 " envelop visual selection with quotes \"
 vnoremap <leader>" <Esc>`>a"<Esc>`<i"<Esc>`>
+
+" toggle spell check
+nnoremap <leader>sc :setlocal spell! spelllang=en<CR>
+
+" mute off search higlight
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+" change grep to use ag
+set grepprg=ag\ --nogroup\ --column\ $*
+set grepformat=%f:%l:%c:%m
 
 " }}}
 " ----------------------------------------------------------------------------
