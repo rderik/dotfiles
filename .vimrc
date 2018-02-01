@@ -23,7 +23,7 @@ Plug 'tpope/vim-surround'
 
 Plug 'ascenator/L9'
 " FZF Fuzzy Search
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '/usr/local/opt/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Colour schema
 Plug 'junegunn/seoul256.vim'
