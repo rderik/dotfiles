@@ -1,0 +1,23 @@
+# vim: filetype=sh
+# Prompt
+# based one https://raw.githubusercontent.com/nicolashery/mac-dev-setup/master/.bash_prompt
+# --------------------------------------------
+
+parse_git_dirty() {
+  [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
+}
+
+parse_git_branch() {
+  git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/ (\1 $(parse_git_dirty))/"
+}
+
+if [ "$PLATFORM" = Linux ]; then
+  PS1="\[\e[1;38m\]\u\[\e[1;34m\]@\[\e[1;31m\]\h\[\e[1;30m\]:"
+  PS1="$PS1\[\e[0;38m\]\W\[\e[1;35m\]> \[\e[0m\]"
+else
+  ### git-prompt
+  PROMPT_COMMAND='printf "\[\e[38;5;59m\]%$(($COLUMNS - 4))s\r" "$(parse_git_branch " (%s)") ($(date +%m/%d\ %H:%M:%S))"'
+  PS1="\[\e[34m\]\u\[\e[1;32m\]@\[\e[0;33m\]\h\[\e[35m\]:"
+  PS1="$PS1\[\e[m\]\W\[\e[1;31m\]> \[\e[0m\]"
+fi
+# --------------------------------------------------------------------

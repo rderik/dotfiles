@@ -1,0 +1,4 @@
+# vi: set ft=sh :
+
+# Add yarn npm local modules
+export PATH="$PATH:./node_modules/.bin"

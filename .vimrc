@@ -1,7 +1,8 @@
 " My vimrc is highly based on:
 " https://github.com/junegunn/dotfiles/blob/master/vimrc
-" vim: set foldmethod=marker foldlevel=0:
-set nocompatible"{{{"}}}
+" vim: foldmethod=marker
+
+set nocompatible
 let s:darwin = has('mac')
 
 " Plug section {{{
@@ -20,13 +21,18 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 
+" Auto close pairs {} [] "" ''
+Plug 'jiangmiao/auto-pairs'
+
 
 Plug 'ascenator/L9'
 " FZF Fuzzy Search
-Plug 'junegunn/fzf', { 'dir': '/usr/local/opt/fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 " Colour schema
 Plug 'junegunn/seoul256.vim'
+Plug 'liuchengxu/space-vim-dark'
+Plug 'jacoborus/tender.vim'
 " Useful tools for aligning text
 Plug 'junegunn/vim-easy-align'
 " helpful plugin to write notes on vim using lists and bullets
@@ -51,6 +57,8 @@ Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
 
 " Nerd Tree to view files
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Nerd Commenter
+Plug 'scrooloose/nerdcommenter'
 " Git flags
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
@@ -68,6 +76,8 @@ if v:version >= 703
 endif
 " Javascript
 Plug 'pangloss/vim-javascript'
+"JSX
+Plug 'mxw/vim-jsx'
 " Rails
 Plug 'tpope/vim-rails'
 " TextObjects
@@ -87,6 +97,9 @@ Plug 'xolox/vim-session'
 Plug 'sjl/tslime.vim'
 
 Plug 'mrtazz/simplenote.vim'
+
+" Emmet is a text expander
+Plug 'mattn/emmet-vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -113,11 +126,13 @@ runtime macros/matchit.vim
 "
 " Plugins configurations {{{
 " Unified color scheme (default: dark)
-colo seoul256
+"colo seoul256
+"colo space-vim-dark
+colo tender
 " Light color scheme
-colo seoul256-light
+"colo seoul256-light
 " Switch
-set background=dark
+"set background=dark
 
 let mapleader = "\\"
 let maplocalleader = "\\"
@@ -130,6 +145,10 @@ nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\
 nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
+
+"tags
+nnoremap <silent> <Leader>t       :Tags <CR>
+
 
 " FZF configuration
 " This is the default extra key bindings
@@ -198,6 +217,12 @@ let g:ale_lint_on_save = 0
 " SimpleNote
 let g:SimplenoteVertical=1
 
+" Emmet JSX support of little detials like className
+let g:user_emmet_settings = {
+\  'javascript.jsx' : {
+\      'extends' : 'jsx',
+\  },
+\}
 " }}}
 
 " ----------------------------------------------------------------------------
@@ -298,6 +323,10 @@ set wildmenu
 set wildmode=list:longest
 set laststatus=2
 set incsearch
+set modelines=3
+"cursorlines are very useful but they make the whole interface slow
+"set cursorline "highlight current line
+"set cursorcolumn "highlight curent column
 " ctags
 set tags=./tags
 " shows row and column number at bottom right corner
@@ -330,6 +359,15 @@ endif
 " %#HighlightGroup#
 set statusline=%<[%n]\ %F\ %m%r%y\ %{exists('g:loaded_fugitive')?fugitive#statusline():''}\ %=%-14.(%l,%c%V%)\ %P
 
+" yank to clipboard
+if has("clipboard")
+  set clipboard=unnamed " copy to the system clipboard
+
+  if has("unnamedplus") " X11 support
+    set clipboard+=unnamedplus
+  endif
+endif
+
 " ----------------------------------------------------------------------------
 " Readline-style key bindings in command-line (excerpt from rsi.vim)
 " ----------------------------------------------------------------------------
@@ -352,6 +390,9 @@ let g:tslime_visual_mapping = '<leader>t'
 let g:tslime_vars_mapping = '<leader>T'
 " }}}
 
+" ----------------------------------------------------------------------------
+" Mappings {{{
+" ----------------------------------------------------------------------------
 " .vimrc utils
 " edit vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
@@ -360,11 +401,27 @@ nnoremap <leader>sv :source $MYVIMRC<cr>
 " envelop visual selection with quotes \"
 vnoremap <leader>" <Esc>`>a"<Esc>`<i"<Esc>`>
 
+" bash_profile utils
+let $BASH_PROFILE = '~/.bash_profile'
+nnoremap <leader>eb :vsplit $BASH_PROFILE<cr>
+
 " toggle spell check
 nnoremap <leader>sc :setlocal spell! spelllang=en<CR>
 
 " mute off search higlight
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+" Mappings to move lines
+nnoremap <leader>mj :m .+1<CR>==
+nnoremap <leader>mk :m .-2<CR>==
+inoremap <leader>mj <Esc>:m .+1<CR>==gi
+inoremap <leader>mk <Esc>:m .-2<CR>==gi
+vnoremap <leader>mj :m '>+1<CR>gv=gv
+vnoremap <leader>mk :m '<-2<CR>gv=gv
+
+nnoremap <leader>b :Buffers<CR>
+
+" }}}
 
 " change grep to use ag
 set grepprg=ag\ --nogroup\ --column\ $*
