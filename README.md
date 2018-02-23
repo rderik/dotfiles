@@ -1,4 +1,4 @@
-# vimrc
+# dotfiles
 just my personal dotfiles configuration
 
 Most of my personal vim configuration are inspired by the code in [JuneGunn](https://github.com/junegunn configuration)
