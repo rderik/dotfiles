@@ -25,30 +25,30 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 
 
+" l9 is a Vim-script library, which provides some utility functions and commands
+" for programming in Vim.
 Plug 'ascenator/L9'
 " FZF Fuzzy Search
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" Colour schema
-Plug 'junegunn/seoul256.vim'
-Plug 'liuchengxu/space-vim-dark'
-Plug 'jacoborus/tender.vim'
+
+" Plugin that makes color aproximation for temrinal
+Plug 'godlygeek/csapprox'
+" Colour schemas
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'rderik/thankful_eyes'
+Plug 'vim-scripts/CSApprox'
+
 " Useful tools for aligning text
 Plug 'junegunn/vim-easy-align'
 " helpful plugin to write notes on vim using lists and bullets
 Plug 'junegunn/vim-journal'
 " Git Commit browser requires vim-fugitive (installed before)
 Plug 'junegunn/gv.vim'
-" Focus writing plugin
-Plug 'junegunn/goyo.vim'
-" Adds colour to goyo
-Plug 'junegunn/limelight.vim'
 "  helps visualize matches of parentheses
 Plug 'junegunn/rainbow_parentheses.vim'
-if s:darwin
-    " Markdown Preview
-    Plug 'junegunn/vim-xmark', { 'do': 'make' }
-endif
+" Markdown Preview
+Plug 'junegunn/vim-xmark', { 'do': 'make' }
 " vimscrip test framework
 Plug 'junegunn/vader.vim'
 
@@ -71,9 +71,6 @@ if v:version >= 703
 endif
 
 " Languages
-if v:version >= 703
-  Plug 'vim-ruby/vim-ruby'
-endif
 " Javascript
 Plug 'pangloss/vim-javascript'
 "JSX
@@ -84,10 +81,20 @@ Plug 'tpope/vim-rails'
 Plug 'kana/vim-textobj-user'
 " Ruby textobj
 Plug 'nelstrom/vim-textobj-rubyblock'
+" Ruby
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-bundler'
+Plug 'tpope/vim-rake'
+" Rust
+Plug 'rust-lang/rust.vim'
+" Cargo
+Plug 'timonv/vim-cargo'
+" Racer - use Racer for Rust code completion and navigation.
+Plug 'racer-rust/vim-racer'
 " My potion plugin
 Plug 'rderik/potion'
-" ALE for linters
-Plug 'w0rp/ale'
+" Fish script
+Plug 'dag/vim-fish'
 
 " Session manager
 Plug 'xolox/vim-misc' " vim-session dependency
@@ -95,8 +102,6 @@ Plug 'xolox/vim-session'
 
 " Sent commands from vim to TMUX
 Plug 'sjl/tslime.vim'
-
-Plug 'mrtazz/simplenote.vim'
 
 " Emmet is a text expander
 Plug 'mattn/emmet-vim'
@@ -126,13 +131,7 @@ runtime macros/matchit.vim
 "
 " Plugins configurations {{{
 " Unified color scheme (default: dark)
-"colo seoul256
-"colo space-vim-dark
-colo tender
-" Light color scheme
-"colo seoul256-light
-" Switch
-"set background=dark
+colo thankful_eyes
 
 let mapleader = "\\"
 let maplocalleader = "\\"
@@ -168,10 +167,6 @@ xnoremap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nnoremap ga <Plug>(EasyAlign)
 
-" Limelight keymap
-nnoremap <Leader>l <Plug>(Limelight)
-xnoremap <Leader>l <Plug>(Limelight)
-
 " Session config
 let g:session_autosave = 'no'
 
@@ -205,60 +200,20 @@ function! s:vader_tests()
 endfunction
 
 
-" Linter configuration
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\}
-" This flag can be set to 0 to disable linting when the buffer is entered.
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_save = 0
-
-" SimpleNote
-let g:SimplenoteVertical=1
-
 " Emmet JSX support of little detials like className
 let g:user_emmet_settings = {
 \  'javascript.jsx' : {
 \      'extends' : 'jsx',
 \  },
 \}
+" Racer Rust
+set hidden
+let g:racer_cmd = "$HOME/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
 " }}}
 
 " ----------------------------------------------------------------------------
-" goyo.vim + limelight.vim {{{
-" ----------------------------------------------------------------------------
-let g:limelight_paragraph_span = 1
-let g:limelight_priority = -1
-
-function! s:goyo_enter()
-  if has('gui_running')
-    set fullscreen
-    set background=light
-    set linespace=7
-  elseif exists('$TMUX')
-    silent !tmux set status off
-  endif
-  Limelight
-  let &l:statusline = '%M'
-  hi StatusLine ctermfg=red guifg=red cterm=NONE gui=NONE
-endfunction
-
-function! s:goyo_leave()
-  if has('gui_running')
-    set nofullscreen
-    set background=dark
-    set linespace=0
-  elseif exists('$TMUX')
-    silent !tmux set status on
-  endif
-  Limelight!
-endfunction
-
-nnoremap <Leader>G :Goyo<CR>
-" }}}
-" ----------------------------------------------------------------------------
-" Autocommand {{{
+" Autocommand {{{{{{}}}
 " ----------------------------------------------------------------------------
 augroup nerd_loader
   autocmd!
@@ -287,10 +242,6 @@ augroup vimrc
   " Racket auto indent replacement
   autocmd filetype lisp,scheme,art setlocal equalprg=scmindent.rkt
 
-  " Limelight Goyo auto integration
-  autocmd! User GoyoEnter nested call <SID>goyo_enter()
-  autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
   " vim-after-object
   autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
 
@@ -316,7 +267,7 @@ set pastetoggle=<F3>
 set bs=2
 set ts=2
 set sw=2
-set number
+set rnu
 set encoding=utf-8
 set history=1000
 set wildmenu
@@ -324,6 +275,7 @@ set wildmode=list:longest
 set laststatus=2
 set incsearch
 set modelines=3
+set eol
 "cursorlines are very useful but they make the whole interface slow
 "set cursorline "highlight current line
 "set cursorcolumn "highlight curent column
@@ -334,7 +286,7 @@ set ruler
 " fix to use clipboard on tmux
 set clipboard=unnamed
 set hlsearch
-filetype plugin indent on    " required
+filetype plugin indent on
 
 " Annoying temporary files
 set backupdir=/tmp//,.
@@ -385,9 +337,9 @@ nnor <leader>yf :let @"=expand("%:p")<CR>
 nnor <leader>fn :let @"=expand("%")<CR>
 " Slime configuration {{{
 let g:tslime_ensure_trailing_newlines = 2
-let g:tslime_normal_mapping = '<leader>t'
-let g:tslime_visual_mapping = '<leader>t'
-let g:tslime_vars_mapping = '<leader>T'
+let g:tslime_normal_mapping = '<Leader>t'
+let g:tslime_visual_mapping = '<Leader>t'
+let g:tslime_vars_mapping = '<Leader>T'
 " }}}
 
 " ----------------------------------------------------------------------------
@@ -398,8 +350,6 @@ let g:tslime_vars_mapping = '<leader>T'
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 " source vimrc
 nnoremap <leader>sv :source $MYVIMRC<cr>
-" envelop visual selection with quotes \"
-vnoremap <leader>" <Esc>`>a"<Esc>`<i"<Esc>`>
 
 " bash_profile utils
 let $BASH_PROFILE = '~/.bash_profile'
@@ -411,27 +361,35 @@ nnoremap <leader>sc :setlocal spell! spelllang=en<CR>
 " mute off search higlight
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
-" Mappings to move lines
-nnoremap <leader>mj :m .+1<CR>==
-nnoremap <leader>mk :m .-2<CR>==
-inoremap <leader>mj <Esc>:m .+1<CR>==gi
-inoremap <leader>mk <Esc>:m .-2<CR>==gi
-vnoremap <leader>mj :m '>+1<CR>gv=gv
-vnoremap <leader>mk :m '<-2<CR>gv=gv
-
+" use FZF buffers
 nnoremap <leader>b :Buffers<CR>
 
 " }}}
+
+" Close all buffers except currenton
+"nnoremap <leader>z :%bd|e#
+
+" Mappings for vimscirpt
+nnoremap <leader>x :exec getline('.')<CR>
 
 " change grep to use ag
 set grepprg=ag\ --nogroup\ --column\ $*
 set grepformat=%f:%l:%c:%m
 
+" Show syntax highlighting groups for word under cursor
+nmap <C-S-P> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
 " }}}
 " ----------------------------------------------------------------------------
 " Bug fix for Hyper term {{{
 " ----------------------------------------------------------------------------
-set t_RV=
+"set t_RV=
 " }}}
 " ============================================================================
 " LOCAL VIMRC {{{
