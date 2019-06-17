@@ -1,0 +1,18 @@
+# vi: set ft=sh :
+
+# Add yarn npm local modules
+export PATH="$PATH:./node_modules/.bin"
+
+# Add sourcekit-LSP to the path
+export PATH="$PATH:/Users/derik/Documents/Development/LSP/sourcekit-lsp/.build/debug/"
+
+# ICU includes
+export PATH="$PATH:/usr/local/opt/icu4c/sbin"
+export PATH="$PATH:/usr/local/opt/icu4c/bin"
+
+# SQLite
+export PATH="/usr/local/opt/sqlite/bin:$PATH"
+
+# Fastlane
+export PATH="$HOME/.fastlane/bin:$PATH"
+

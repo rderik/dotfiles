@@ -1,0 +1,58 @@
+# vim: filetype=sh
+
+# --files: List files that would be searched but do not search
+# --no-ignore: Do not respect .gitignore, etc...
+# --hidden: Search hidden files and folders
+# --follow: Follow symlinks
+# --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
+#export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+
+#https://stackoverflow.com/a/51061046
+silent_background() {
+    { 2>&3 "$@"& } 3>&2 2>/dev/null
+    disown &>/dev/null  # Prevent whine if job has already completed
+}
+#Node version manager NVM
+export NVM_DIR="$HOME/.nvm"
+# this takes a long time so I'll run it on background
+#source "/usr/local/opt/nvm/nvm.sh" # OLD Config Script
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# RBENV configuration
+# this takes a long time so I'll run it on background
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+#qt5 for capybara webkit
+# this takes a long time so I'll run it on background
+#silent_background export PATH="$(brew --prefix qt@5.5)/bin:$PATH"
+
+#Rust cargo add to path
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Rails bash completion
+if [ -f $(brew --prefix)/etc/bash_completion.d/rails.bash ]; then
+  source $(brew --prefix)/etc/bash_completion.d/rails.bash
+fi
+
+# Ledger bash completion
+if [ -f $(brew --prefix)/etc/bash_completion.d/rails.bash ]; then
+  source $(brew --prefix)/etc/bash_completion.d/ledger-completion.bash
+fi
+
+#imagemagick dirty fixes TODO: remove when possible
+export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
+export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
+export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
+
+#More trash for MySQL
+export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/mysql@5.6/lib"
+export CPPFLAGS="-I/usr/local/opt/mysql@5.6/include"
+
+
+# jenv to handle Java Versions
+eval "$(jenv init -)"

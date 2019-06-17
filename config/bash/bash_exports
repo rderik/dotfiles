@@ -1,0 +1,35 @@
+# vi: set ft=sh :
+export EDITOR="vi"
+
+# support UTF-environment
+export LC_ALL=en_US.UTF-8
+export LANG="$LC_ALL"
+#LS colours
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+
+# BASH HISTORY
+export SHELL_SESSION_HISTORY=0
+export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
+export HISTSIZE=100000                   # big big history
+export HISTFILESIZE=100000               # big big history
+export HISTFILE=$HOME/.bash_history
+shopt -s histappend                      # append to history, don't overwrite it
+
+export PATH="$PATH:/Applications/DevDesktop/tools"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+#PostgreSQL
+export PGDATA='/usr/local/var/postgres'
+
+# Save and reload the history after each command finishes
+#export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+#For compilers to find ICU
+export LDFLAGS="-L/usr/local/opt/icu4c/lib"
+export CPPFLAGS="-I/usr/local/opt/icu4c/include"
+
+
+#For pkg-config to find icu4c you may need to set
+export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
+

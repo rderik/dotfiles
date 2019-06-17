@@ -12,6 +12,7 @@ call plug#begin('~/.vim/plugged')
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
+Plug 'tpope/vim-rhubarb'
 if v:version >= 703
   Plug 'mhinz/vim-signify'
 endif
@@ -20,11 +21,10 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
-
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-speeddating'
 " Auto close pairs {} [] "" ''
 Plug 'jiangmiao/auto-pairs'
-
-
 " l9 is a Vim-script library, which provides some utility functions and commands
 " for programming in Vim.
 Plug 'ascenator/L9'
@@ -37,9 +37,18 @@ Plug 'godlygeek/csapprox'
 " Colour schemas
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'rderik/thankful_eyes'
+Plug 'ayu-theme/ayu-vim'
 Plug 'vim-scripts/CSApprox'
 
-" Useful tools for aligning text
+" Org-mode
+Plug 'jceb/vim-orgmode'
+" Plugin to create links - Universal Text Linking
+Plug 'vim-scripts/utl.vim'
+" Wiki
+Plug 'vimwiki/vimwiki'
+" Ledger accounting
+Plug 'ledger/vim-ledger'
+"Useful tools for aligning text
 Plug 'junegunn/vim-easy-align'
 " helpful plugin to write notes on vim using lists and bullets
 Plug 'junegunn/vim-journal'
@@ -70,13 +79,17 @@ if v:version >= 703
     Plug 'junegunn/vim-after-object'
 endif
 
+" Tmux integration
+Plug 'benmills/vimux'
+" to run tests (rspec, etc)
+Plug 'skalnik/vim-vroom'
 " Languages
+" Syntax checking
+Plug 'vim-syntastic/syntastic'
 " Javascript
 Plug 'pangloss/vim-javascript'
 "JSX
 Plug 'mxw/vim-jsx'
-" Rails
-Plug 'tpope/vim-rails'
 " TextObjects
 Plug 'kana/vim-textobj-user'
 " Ruby textobj
@@ -85,7 +98,12 @@ Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rake'
+Plug 'tpope/vim-dispatch'
+" Rails
+Plug 'tpope/vim-rails'
 " Rust
+" TypeScript
+Plug 'leafgarland/typescript-vim'
 Plug 'rust-lang/rust.vim'
 " Cargo
 Plug 'timonv/vim-cargo'
@@ -95,6 +113,15 @@ Plug 'racer-rust/vim-racer'
 Plug 'rderik/potion'
 " Fish script
 Plug 'dag/vim-fish'
+" Swift
+Plug 'keith/swift.vim'
+Plug 'jph00/swift-apple'
+" Vapor Leaf templating language
+Plug 'vapor-community/vim-leaf'
+" Vim LSP related
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+
 
 " Session manager
 Plug 'xolox/vim-misc' " vim-session dependency
@@ -105,6 +132,9 @@ Plug 'sjl/tslime.vim'
 
 " Emmet is a text expander
 Plug 'mattn/emmet-vim'
+
+" Nginx syntax
+Plug 'vim-scripts/nginx.vim'
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -130,8 +160,13 @@ runtime macros/matchit.vim
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
 " Plugins configurations {{{
+
 " Unified color scheme (default: dark)
-colo thankful_eyes
+"set termguicolors     " enable true colors support
+"let ayucolor="light"  " for light version of theme
+let ayucolor="mirage" " for mirage version of theme
+"let ayucolor="dark"   " for dark version of theme
+colorscheme thankful_eyes
 
 let mapleader = "\\"
 let maplocalleader = "\\"
@@ -145,9 +180,11 @@ nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
 xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
 
-"tags
-nnoremap <silent> <Leader>t       :Tags <CR>
-
+" EasyAlign configuration
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xnoremap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nnoremap ga <Plug>(EasyAlign)
 
 " FZF configuration
 " This is the default extra key bindings
@@ -160,45 +197,102 @@ let g:fzf_layout = { 'window': '10 split | enew'}
 " Default fzf layout
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~40%' }
-
-" EasyAlign configuration
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xnoremap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nnoremap ga <Plug>(EasyAlign)
-
-" Session config
-let g:session_autosave = 'no'
+"AG is already configured to work with FZF if we want to us ripgrep we use the
+"following command, and now we can use Rg and the search will be performed by
+"ripgrep
+command! -bang -nargs=* Rg
+\ call fzf#vim#grep(
+\   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+\   <bang>0 ? fzf#vim#with_preview('up:60%')
+\           : fzf#vim#with_preview('right:50%:hidden', '?'),
+\   <bang>0)
 
 " Journal date function
 function! s:Insert_journal_date()
-  let curr_date = strftime("%B %A %d, %Y")
-  call append(".", [curr_date , "=================="])
+let curr_date = strftime("%B %A %d, %Y")
+call append(".", [curr_date , "=================="])
 endfunction
+
+"Rust
+let g:rustfmt_autosave = 1
+" Session config
+let g:session_autosave = 'no'
+
+
+
+"Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+nnoremap <leader>sy :SyntasticToggleMode<CR>
+
+"tags
+nnoremap <silent> <Leader>t       :Tags <CR>
 
 " test command for Vader
 function! s:vader_tests()
-  if expand('%:e') == 'vim'
-    let testfile = printf('%s/%s.vader', expand('%:p:h'),
-          \ tr(expand('%:p:h:t'), '-', '_'))
-    if !filereadable(testfile)
-      echoerr 'File does not exist: '. testfile
-      return
-    endif
-    source %
-    execute 'Vader' testfile
-  else
-    let sourcefile = printf('%s/%s.vim', expand('%:p:h'),
-          \ tr(expand('%:p:h:t'), '-', '_'))
-    if !filereadable(sourcefile)
-      echoerr 'File does not exist: '. sourcefile
-      return
-    endif
-    execute 'source' sourcefile
-    Vader
+if expand('%:e') == 'vim'
+  let testfile = printf('%s/%s.vader', expand('%:p:h'),
+        \ tr(expand('%:p:h:t'), '-', '_'))
+  if !filereadable(testfile)
+    echoerr 'File does not exist: '. testfile
+    return
   endif
+  source %
+  execute 'Vader' testfile
+else
+  let sourcefile = printf('%s/%s.vim', expand('%:p:h'),
+        \ tr(expand('%:p:h:t'), '-', '_'))
+  if !filereadable(sourcefile)
+    echoerr 'File does not exist: '. sourcefile
+    return
+  endif
+  execute 'source' sourcefile
+  Vader
+endif
 endfunction
 
+" vimux + vroom for test cases running through vimux
+let g:vroom_use_vimux=1
+let g:vroom_use_dispatch=0
+let g:vroom_test_unit_command="ruby -r minitest/pride"
+" vroom defines by default <Leader>r to run test on current file
+" and <leader>R to run nearest test
+" Run the current file with rspec
+map <Leader>rb :call VimuxRunCommand("clear; bundle exec rspec " . bufname("%"))<CR>
+map <Leader>rt :call VimuxRunCommand("bundle exec rspec " . bufname("%") . ":" . line('.'))<CR>
+" Prompt for a command to run
+map <Leader>vp :VimuxPromptCommand<CR>
+" Run last command executed by VimuxRunCommand
+map <Leader>vl :VimuxRunLastCommand<CR>
+" Inspect runner pane
+map <Leader>vi :VimuxInspectRunner<CR>
+" Close vim tmux runner opened by VimuxRunCommand
+map <Leader>vq :VimuxCloseRunner<CR>
+" Interrupt any command running in the runner pane
+map <Leader>vx :VimuxInterruptRunner<CR>
+" Zoom the runner pane (use <bind-key> z to restore runner pane)
+map <Leader>vz :call VimuxZoomRunner()<CR>
+" Send keys to Pane
+map <Leader>vd :call VimuxSendKeys("C-d")<CR>
+" Send command to run current File for test
+"map <LeadeR>vrt :call VroomRunTestFile()
+function! VimuxSlime()
+call VimuxSendText(@v)
+call VimuxSendKeys("Enter")
+endfunction
+" If text is selected, save it in the v buffer and send that buffer it to tmux
+vmap <LocalLeader>vs "vy :call VimuxSlime()<CR>
+" Select current paragraph and send it to tmux
+nmap <LocalLeader>vs vip<LocalLeader>vs<CR>
+
+" follow UTL link
+nmap <LocalLeader>gt :Utl<CR>
 
 " Emmet JSX support of little detials like className
 let g:user_emmet_settings = {
@@ -210,53 +304,99 @@ let g:user_emmet_settings = {
 set hidden
 let g:racer_cmd = "$HOME/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
-" }}}
+
+" VimWiki
+let personal_wiki = {}
+let personal_wiki.path = '~/Documents/Development/devnotes'
+let personal_wiki.syntax = 'markdown'
+let personal_wiki.ext = '.md'
+
+let uva_wiki = {}
+let uva_wiki.path = '~/Documents/Work/UVa/worknotes'
+let uva_wiki.syntax = 'markdown'
+let uva_wiki.ext = '.md'
+
+let emg_wiki = {}
+let emg_wiki.path = '~/Documents/Work/emaginacion/notas'
+let emg_wiki.syntax = 'markdown'
+let emg_wiki.ext = '.md'
+
+let g:vimwiki_list = [personal_wiki, uva_wiki, emg_wiki]
+
+" SourceKit-LSP configuration
+if executable('sourcekit-lsp')
+  au User lsp_setup call lsp#register_server({
+      \ 'name': 'sourcekit-lsp',
+      \ 'cmd': {server_info->['sourcekit-lsp']},
+      \ 'whitelist': ['swift'],
+      \ })
+endif
+autocmd FileType swift setlocal omnifunc=lsp#complete
+
+"Ledger
+let g:ledger_align_at = 80
+
+
+"}}}
 
 " ----------------------------------------------------------------------------
-" Autocommand {{{{{{}}}
+" Autocommand {{{{{{
 " ----------------------------------------------------------------------------
 augroup nerd_loader
-  autocmd!
-  autocmd VimEnter * silent! autocmd! FileExplorer
-  autocmd BufEnter,BufNew *
-        \  if isdirectory(expand('<amatch>'))
-        \|   call plug#load('nerdtree')
-        \|   execute 'autocmd! nerd_loader'
-        \| endif
+autocmd!
+autocmd VimEnter * silent! autocmd! FileExplorer
+autocmd BufEnter,BufNew *
+      \  if isdirectory(expand('<amatch>'))
+      \|   call plug#load('nerdtree')
+      \|   execute 'autocmd! nerd_loader'
+      \| endif
 augroup END
 augroup vimrc
-  autocmd!
+autocmd!
 
-  " JavaScript
-  autocmd FileType javascript nnoremap <buffer> <localleader>c I//<Esc>
+" JavaScript
+autocmd FileType javascript nnoremap <buffer> <localleader>c I//<Esc>
 
-  " Ruby
-  autocmd FileType ruby nnoremap <buffer> <localleader>c I#<Esc>
+" Ruby
+autocmd FileType ruby nnoremap <buffer> <localleader>c I#<Esc>
 
-  " Journal
-  autocmd FileType journal nnoremap <buffer> <localleader>d :<c-u>call <SID>Insert_journal_date()<CR>
+" Journal
+autocmd FileType journal nnoremap <buffer> <localleader>d :<c-u>call <SID>Insert_journal_date()<CR>
 
-  " Potion
-  "autocmd FileType potion let g:potion_command = "PATHTO/bin/potion"
+" Ledger
+au FileType ledger noremap { ?^\d<CR>
+au FileType ledger noremap } /^\d<CR>
+autocmd FileType ledger setlocal foldmethod=syntax
+autocmd FileType ledger nnoremap <buffer> <localleader>d :<c-u>call ledger#transaction_date_set(line('.'), "auxiliary")<CR>
+autocmd FileType ledger nnoremap <buffer> <localleader>s :<c-u>call ledger#transaction_state_toggle(line('.'), ' *?!')<CR>
+autocmd FileType ledger nnoremap <buffer> <localleader>e :<c-u>call ledger#entry()<CR>
+" If text is selected, save it in the v buffer and send that buffer it to tmux
+autocmd FileType ledger vmap <LocalLeader>= "v :LedgerAlign<CR>
 
-  " Racket auto indent replacement
-  autocmd filetype lisp,scheme,art setlocal equalprg=scmindent.rkt
+" Potion
+"autocmd FileType potion let g:potion_command = "PATHTO/bin/potion"
 
-  " vim-after-object
-  autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
+" Racket auto indent replacement
+autocmd filetype lisp,scheme,art setlocal equalprg=scmindent.rkt
 
-  " http://vim.wikia.com/wiki/Highlight_unwanted_spaces
-  au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
-  au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
+" vim-after-object
+autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
 
-  " Browsing - A vim plugin to display the indention levels with thin vertical lines
-  autocmd! User indentLine doautocmd indentLine Syntax
+" http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+au BufNewFile,BufRead,InsertLeave * silent! match ExtraWhitespace /\s\+$/
+au InsertEnter * silent! match ExtraWhitespace /\s\+\%#\@<!$/
 
-  " Set the command :Test for any .vader .vim file
+" Browsing - A vim plugin to display the indention levels with thin vertical lines
+autocmd! User indentLine doautocmd indentLine Syntax
+
+" Set the command :Test for any .vader .vim file
 autocmd BufRead *.{vader,vim}
-      \ command! -buffer Test call s:vader_tests()
+    \ command! -buffer Test call s:vader_tests()
 augroup END
-" }}}
+
+" To behave nicely when resizeing the current pane in tmux
+autocmd VimResized * :wincmd =
+" }}}}}}
 
 
 " ----------------------------------------------------------------------------
@@ -267,7 +407,7 @@ set pastetoggle=<F3>
 set bs=2
 set ts=2
 set sw=2
-set rnu
+set nu
 set encoding=utf-8
 set history=1000
 set wildmenu
@@ -276,6 +416,7 @@ set laststatus=2
 set incsearch
 set modelines=3
 set eol
+set nolist
 "cursorlines are very useful but they make the whole interface slow
 "set cursorline "highlight current line
 "set cursorcolumn "highlight curent column
@@ -361,6 +502,12 @@ nnoremap <leader>sc :setlocal spell! spelllang=en<CR>
 " mute off search higlight
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
+" Set list of non visible characters
+set listchars=eol:⏎,tab:␉·,trail:☠,nbsp:⎵
+" The command :dig displays other digraphs you can use.
+nmap <leader>sl :set list!<CR>
+
+
 " use FZF buffers
 nnoremap <leader>b :Buffers<CR>
 
@@ -384,6 +531,11 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
+" General Surround for erb
+" as suggested by TPope https://github.com/tpope/vim-rails/issues/245
+let g:surround_{char2nr('-')} = "<% \r %>"
+let g:surround_{char2nr('=')} = "<%= \r %>"
 
 " }}}
 " ----------------------------------------------------------------------------
