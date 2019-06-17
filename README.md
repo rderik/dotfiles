@@ -4,7 +4,7 @@ You can find my personal configuration files (dotfiles).
 
 ## Notes
 
-My personal vim configuration were inspired by the code in [JuneGunn](https://github.com/junegunn configuration)
+My personal vim configuration were inspired by the code in [JuneGunn](https://github.com/junegunn) configuration
 that you can find [here](https://github.com/junegunn/dotfiles/blob/master/vimrc). My Config has grown quite a bit
 but you can always take only what you need or get some ideas from my configs.
 
