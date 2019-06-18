@@ -1,6 +1,6 @@
 # dotfiles
 
-You can find my personal configuration files (dotfiles).
+This repo contains my personal configuration files (dotfiles).
 
 ## Notes
 
