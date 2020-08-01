@@ -1,10 +1,10 @@
 # vi: set ft=sh :
 
+# Bison
+export PATH="/usr/local/opt/bison/bin:$PATH"
+
 # Add yarn npm local modules
 export PATH="$PATH:./node_modules/.bin"
-
-# Add sourcekit-LSP to the path
-export PATH="$PATH:/Users/derik/Documents/Development/LSP/sourcekit-lsp/.build/debug/"
 
 # ICU includes
 export PATH="$PATH:/usr/local/opt/icu4c/sbin"
@@ -16,3 +16,11 @@ export PATH="/usr/local/opt/sqlite/bin:$PATH"
 # Fastlane
 export PATH="$HOME/.fastlane/bin:$PATH"
 
+# Flex
+export PATH="/usr/local/opt/flex/bin:$PATH"
+
+# custom scripts
+export PATH="$HOME/.config/bin:$PATH"
+
+# radare2
+export PATH="${R2PM_BINDIR}:$PATH"

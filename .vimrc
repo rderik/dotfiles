@@ -23,6 +23,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-obsession'
 " Auto close pairs {} [] "" ''
 Plug 'jiangmiao/auto-pairs'
 " l9 is a Vim-script library, which provides some utility functions and commands
@@ -60,6 +61,8 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-xmark', { 'do': 'make' }
 " vimscrip test framework
 Plug 'junegunn/vader.vim'
+" Create Table of Content form Markdown files
+Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
 
 " Browsing - A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
@@ -71,7 +74,10 @@ Plug 'scrooloose/nerdcommenter'
 " Git flags
 Plug 'Xuyuanp/nerdtree-git-plugin'
 
-" Opens the directory of current file
+"Vim Tables
+Plug 'dhruvasagar/vim-table-mode'
+
+"Opens the directory of current file
 Plug 'justinmk/vim-gtfo'
 
 " Defines text objects to target text after the designated characters.
@@ -83,9 +89,9 @@ endif
 Plug 'benmills/vimux'
 " to run tests (rspec, etc)
 Plug 'skalnik/vim-vroom'
+
 " Languages
-" Syntax checking
-Plug 'vim-syntastic/syntastic'
+
 " Javascript
 Plug 'pangloss/vim-javascript'
 "JSX
@@ -101,9 +107,9 @@ Plug 'tpope/vim-rake'
 Plug 'tpope/vim-dispatch'
 " Rails
 Plug 'tpope/vim-rails'
-" Rust
 " TypeScript
 Plug 'leafgarland/typescript-vim'
+" Rust
 Plug 'rust-lang/rust.vim'
 " Cargo
 Plug 'timonv/vim-cargo'
@@ -113,15 +119,14 @@ Plug 'racer-rust/vim-racer'
 Plug 'rderik/potion'
 " Fish script
 Plug 'dag/vim-fish'
-" Swift
-Plug 'keith/swift.vim'
-Plug 'jph00/swift-apple'
 " Vapor Leaf templating language
 Plug 'vapor-community/vim-leaf'
-" Vim LSP related
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-
+" Vim LSP related :CocConfig to open configuration file
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Twig template system for PHP
+Plug 'nelsyeung/twig.vim'
 
 " Session manager
 Plug 'xolox/vim-misc' " vim-session dependency
@@ -323,19 +328,11 @@ let emg_wiki.ext = '.md'
 
 let g:vimwiki_list = [personal_wiki, uva_wiki, emg_wiki]
 
-" SourceKit-LSP configuration
-if executable('sourcekit-lsp')
-  au User lsp_setup call lsp#register_server({
-      \ 'name': 'sourcekit-lsp',
-      \ 'cmd': {server_info->['sourcekit-lsp']},
-      \ 'whitelist': ['swift'],
-      \ })
-endif
-autocmd FileType swift setlocal omnifunc=lsp#complete
-
 "Ledger
 let g:ledger_align_at = 80
-
+" Vim markdown Table of Contents
+let g:vmt_insert_anchors = 1
+let g:vmt_auto_update_on_save = 1
 
 "}}}
 
@@ -360,6 +357,11 @@ autocmd FileType javascript nnoremap <buffer> <localleader>c I//<Esc>
 " Ruby
 autocmd FileType ruby nnoremap <buffer> <localleader>c I#<Esc>
 
+" PHP
+autocmd FileType php setlocal ts=4 sw=4 sts=4 expandtab
+
+" Objective-c
+au BufNewFile,BufRead *.m set filetype=objc
 " Journal
 autocmd FileType journal nnoremap <buffer> <localleader>d :<c-u>call <SID>Insert_journal_date()<CR>
 
@@ -373,11 +375,18 @@ autocmd FileType ledger nnoremap <buffer> <localleader>e :<c-u>call ledger#entry
 " If text is selected, save it in the v buffer and send that buffer it to tmux
 autocmd FileType ledger vmap <LocalLeader>= "v :LedgerAlign<CR>
 
+" If the filetype is Makefile then we need to use tabs
+" So do not expand tabs into space.
+autocmd FileType make   set noexpandtab
+
 " Potion
 "autocmd FileType potion let g:potion_command = "PATHTO/bin/potion"
 
 " Racket auto indent replacement
 autocmd filetype lisp,scheme,art setlocal equalprg=scmindent.rkt
+
+" Vimscript
+autocmd FileType vim setlocal ts=4 sw=4 sts=4 expandtab
 
 " vim-after-object
 autocmd VimEnter * call after_object#enable('=', ':', '-', '#', ' ')
@@ -422,6 +431,8 @@ set nolist
 "set cursorcolumn "highlight curent column
 " ctags
 set tags=./tags
+" For Tpope's Fugitive Plugin
+set tags^=./.git/tags;
 " shows row and column number at bottom right corner
 set ruler
 " fix to use clipboard on tmux
@@ -536,6 +547,16 @@ endfunc
 " as suggested by TPope https://github.com/tpope/vim-rails/issues/245
 let g:surround_{char2nr('-')} = "<% \r %>"
 let g:surround_{char2nr('=')} = "<%= \r %>"
+
+" Aoutocomplete improvements
+" https://vim.fandom.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
+set completeopt=longest,menuone
+inoremap <expr> <C-CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 " }}}
 " ----------------------------------------------------------------------------
