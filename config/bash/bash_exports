@@ -51,3 +51,6 @@ export R2PM_GITDIR="/Users/derik/.local/share/radare2/r2pm/git/"
 #Golang
 export GOROOT='/usr/local/go'
 export PATH="$PATH:/usr/local/go/bin"
+
+#FZF
+export FZF_DEFAULT_COMMAND='ag -g ""'
