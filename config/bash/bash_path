@@ -24,3 +24,7 @@ export PATH="$HOME/.config/bin:$PATH"
 
 # radare2
 export PATH="${R2PM_BINDIR}:$PATH"
+
+# rust
+export PATH="$HOME/.cargo/bin:$PATH"
+

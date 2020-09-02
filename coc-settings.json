@@ -1,0 +1,8 @@
+{
+  "languageserver": {
+    "sourcekit": {
+      "command": "sourcekit-lsp",
+      "filetypes": ["swift","c", "c++", "objc"]
+    }
+  }
+}

@@ -39,8 +39,10 @@ Plug 'godlygeek/csapprox'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'rderik/thankful_eyes'
 Plug 'ayu-theme/ayu-vim'
-Plug 'vim-scripts/CSApprox'
+"Plug 'vim-scripts/CSApprox'
 
+" Display ctags on current file
+Plug 'majutsushi/tagbar'
 " Org-mode
 Plug 'jceb/vim-orgmode'
 " Plugin to create links - Universal Text Linking
@@ -94,6 +96,8 @@ Plug 'skalnik/vim-vroom'
 
 " Javascript
 Plug 'pangloss/vim-javascript'
+" Vue JavaScript Frontend
+Plug 'leafOfTree/vim-vue-plugin'
 "JSX
 Plug 'mxw/vim-jsx'
 " TextObjects
@@ -111,6 +115,8 @@ Plug 'tpope/vim-rails'
 Plug 'leafgarland/typescript-vim'
 " Rust
 Plug 'rust-lang/rust.vim'
+"Swift
+Plug 'keith/swift.vim'
 " Cargo
 Plug 'timonv/vim-cargo'
 " Racer - use Racer for Rust code completion and navigation.
@@ -140,6 +146,9 @@ Plug 'mattn/emmet-vim'
 
 " Nginx syntax
 Plug 'vim-scripts/nginx.vim'
+
+"Snippets
+Plug 'honza/vim-snippets'
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -285,6 +294,9 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 map <Leader>vz :call VimuxZoomRunner()<CR>
 " Send keys to Pane
 map <Leader>vd :call VimuxSendKeys("C-d")<CR>
+
+" Show Ctags ofcurrent file
+map <Leader>TT :TagbarToggle<CR>
 " Send command to run current File for test
 "map <LeadeR>vrt :call VroomRunTestFile()
 function! VimuxSlime()
@@ -333,6 +345,10 @@ let g:ledger_align_at = 80
 " Vim markdown Table of Contents
 let g:vmt_insert_anchors = 1
 let g:vmt_auto_update_on_save = 1
+
+let g:coc_global_extensions = ["coc-snippets"]
+" Snippet
+imap <LocalLeader><Tab> <Plug>(coc-snippets-expand)
 
 "}}}
 
