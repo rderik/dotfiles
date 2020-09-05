@@ -63,6 +63,8 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/vim-xmark', { 'do': 'make' }
 " vimscrip test framework
 Plug 'junegunn/vader.vim'
+" Distracton free writing
+Plug 'junegunn/goyo.vim'
 " Create Table of Content form Markdown files
 Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
 
@@ -189,6 +191,8 @@ let maplocalleader = "\\"
 map <C-n> :NERDTreeToggle<CR>
 let g:NERDTreeDirArrows=0
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+let g:NERDTreeSortOrder=['\/$', '*', '\.swp$',  '\.bak$', '\~$']
+let NERDTreeNaturalSort = 0
 " AG maps
 nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>AG       :Ag <C-R><C-A><CR>
@@ -294,6 +298,8 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 map <Leader>vz :call VimuxZoomRunner()<CR>
 " Send keys to Pane
 map <Leader>vd :call VimuxSendKeys("C-d")<CR>
+"Goyo configuration 
+map <Leader>g :Goyo<CR>
 
 " Show Ctags ofcurrent file
 map <Leader>TT :TagbarToggle<CR>
@@ -324,7 +330,7 @@ let g:racer_experimental_completer = 1
 
 " VimWiki
 let personal_wiki = {}
-let personal_wiki.path = '~/Documents/Development/devnotes'
+let personal_wiki.path = '~/Development/devnotes'
 let personal_wiki.syntax = 'markdown'
 let personal_wiki.ext = '.md'
 
@@ -353,7 +359,7 @@ imap <LocalLeader><Tab> <Plug>(coc-snippets-expand)
 "}}}
 
 " ----------------------------------------------------------------------------
-" Autocommand {{{{{{
+" Autocommand {{{
 " ----------------------------------------------------------------------------
 augroup nerd_loader
 autocmd!
@@ -421,7 +427,7 @@ augroup END
 
 " To behave nicely when resizeing the current pane in tmux
 autocmd VimResized * :wincmd =
-" }}}}}}
+" }}}
 
 
 " ----------------------------------------------------------------------------
