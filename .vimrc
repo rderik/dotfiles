@@ -24,8 +24,6 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-obsession'
-" Auto close pairs {} [] "" ''
-Plug 'jiangmiao/auto-pairs'
 " l9 is a Vim-script library, which provides some utility functions and commands
 " for programming in Vim.
 Plug 'ascenator/L9'
@@ -47,8 +45,6 @@ Plug 'majutsushi/tagbar'
 Plug 'jceb/vim-orgmode'
 " Plugin to create links - Universal Text Linking
 Plug 'vim-scripts/utl.vim'
-" Wiki
-Plug 'vimwiki/vimwiki'
 " Ledger accounting
 Plug 'ledger/vim-ledger'
 "Useful tools for aligning text
@@ -227,8 +223,8 @@ command! -bang -nargs=* Rg
 
 " Journal date function
 function! s:Insert_journal_date()
-let curr_date = strftime("%B %A %d, %Y")
-call append(".", [curr_date , "=================="])
+  let l:curr_date = '# ' . strftime('%Y-%m-%d %A')
+  call append('.', [ l:curr_date ])
 endfunction
 
 "Rust
@@ -328,24 +324,6 @@ set hidden
 let g:racer_cmd = "$HOME/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
 
-" VimWiki
-let personal_wiki = {}
-let personal_wiki.path = '~/Development/devnotes'
-let personal_wiki.syntax = 'markdown'
-let personal_wiki.ext = '.md'
-
-let uva_wiki = {}
-let uva_wiki.path = '~/Documents/Work/UVa/worknotes'
-let uva_wiki.syntax = 'markdown'
-let uva_wiki.ext = '.md'
-
-let emg_wiki = {}
-let emg_wiki.path = '~/Documents/Work/emaginacion/notas'
-let emg_wiki.syntax = 'markdown'
-let emg_wiki.ext = '.md'
-
-let g:vimwiki_list = [personal_wiki, uva_wiki, emg_wiki]
-
 "Ledger
 let g:ledger_align_at = 80
 " Vim markdown Table of Contents
@@ -385,7 +363,7 @@ autocmd FileType php setlocal ts=4 sw=4 sts=4 expandtab
 " Objective-c
 au BufNewFile,BufRead *.m set filetype=objc
 " Journal
-autocmd FileType journal nnoremap <buffer> <localleader>d :<c-u>call <SID>Insert_journal_date()<CR>
+autocmd FileType markdown nnoremap <buffer> <localleader>d :<c-u>call <SID>Insert_journal_date()<CR>
 
 " Ledger
 au FileType ledger noremap { ?^\d<CR>
