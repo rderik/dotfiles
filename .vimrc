@@ -63,6 +63,8 @@ Plug 'junegunn/vader.vim'
 Plug 'junegunn/goyo.vim'
 " Create Table of Content form Markdown files
 Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
+" Markdown rendering
+Plug 'plasticboy/vim-markdown'
 
 " Browsing - A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
@@ -245,6 +247,9 @@ let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 nnoremap <leader>sy :SyntasticToggleMode<CR>
 
+"Table mode
+let g:table_mode_header_fillchar='='
+
 "tags
 nnoremap <silent> <Leader>t       :Tags <CR>
 
@@ -330,6 +335,11 @@ let g:ledger_align_at = 80
 let g:vmt_insert_anchors = 1
 let g:vmt_auto_update_on_save = 1
 
+"Vim-markdown plugin
+let g:vim_markdown_conceal=2
+let g:vim_markdown_conceal_code_blocks = 1
+let g:vim_markdown_folding_disabled = 1
+
 let g:coc_global_extensions = ["coc-snippets"]
 " Snippet
 imap <LocalLeader><Tab> <Plug>(coc-snippets-expand)
@@ -362,7 +372,10 @@ autocmd FileType php setlocal ts=4 sw=4 sts=4 expandtab
 
 " Objective-c
 au BufNewFile,BufRead *.m set filetype=objc
-" Journal
+" Treat plist files as XML
+au BufNewFile,BufRead *.plist set filetype=xml
+
+" Markdown
 autocmd FileType markdown nnoremap <buffer> <localleader>d :<c-u>call <SID>Insert_journal_date()<CR>
 
 " Ledger
@@ -401,6 +414,8 @@ autocmd! User indentLine doautocmd indentLine Syntax
 " Set the command :Test for any .vader .vim file
 autocmd BufRead *.{vader,vim}
     \ command! -buffer Test call s:vader_tests()
+" Swift linter
+autocmd FileType swift setlocal makeprg=swiftlint\ lint
 augroup END
 
 " To behave nicely when resizeing the current pane in tmux

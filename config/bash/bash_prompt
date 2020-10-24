@@ -29,5 +29,12 @@ yel=$'\[\e[1;33m\]'
 ### git-prompt
 PS1="${blu}\u${grn}@${yel}\h${mag}:"
 PS1="${PS1}${end}\W${red} $ ${end}"
-PROMPT_COMMAND='printf "${p_gry}%$(($COLUMNS + 17))s${p_end}\r" "$(parse_git_branch) ${p_red}$(parse_git_dirty)${p_gry} ($(date +%m/%d\ %H:%M:%S))"'
+#PROMPT_COMMAND_STR='printf "${p_gry}%$(($COLUMNS + 17))s${p_end}\r" "$(parse_git_branch) ${p_red}$(parse_git_dirty)${p_gry} ($(date +%m/%d\ %H:%M:%S))"'
+PROMPT_COMMAND_STR='"${p_gry}%$(($COLUMNS + 17))s${p_end}\r" "$(parse_git_branch) ${p_red}$(parse_git_dirty)${p_gry}'
+if [[ -z "${SCREENCAST}" ]]; then
+  PROMPT_COMMAND_STR+=' ($(date +%m/%d\ %H:%M:%S))"'
+else
+  PROMPT_COMMAND_STR+='"'
+fi
+PROMPT_COMMAND="printf ${PROMPT_COMMAND_STR}"
 # --------------------------------------------------------------------

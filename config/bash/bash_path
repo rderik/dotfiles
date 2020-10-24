@@ -28,3 +28,5 @@ export PATH="${R2PM_BINDIR}:$PATH"
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# llvm
+export PATH="$PATH:/usr/local/opt/llvm/bin"
