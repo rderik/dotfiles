@@ -37,15 +37,21 @@ rbenv() {
 #Rust cargo add to path
 export PATH="$HOME/.cargo/bin:$PATH"
 
-brew_prefix=$(brew --prefix)
-# Rails bash completion
-if [ -f ${brew_prefix}/etc/bash_completion.d/rails.bash ]; then
-  source ${brew_prefix}/etc/bash_completion.d/rails.bash
-fi
+if [ "$(uname)" == "Darwin" ]; then
+  # bash completion
+  brew_prefix=$(brew --prefix)
+  # Rails bash completion
+  if [ -f ${brew_prefix}/etc/bash_completion.d/rails.bash ]; then
+    source ${brew_prefix}/etc/bash_completion.d/rails.bash
+  fi
 
-# Ledger bash completion
-if [ -f ${brew_prefix}/etc/bash_completion.d/ledger-completion.bash ]; then
-  source ${brew_prefix}/etc/bash_completion.d/ledger-completion.bash
+  # Ledger bash completion
+  if [ -f ${brew_prefix}/etc/bash_completion.d/ledger-completion.bash ]; then
+    source ${brew_prefix}/etc/bash_completion.d/ledger-completion.bash
+  fi
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+  # need to add completions for Linux
+  :
 fi
 
 #imagemagick dirty fixes TODO: remove when possible
