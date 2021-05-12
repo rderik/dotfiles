@@ -84,3 +84,9 @@ pyenv() {
   pyenv $@
 }
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+# Add terraform autocomplete
+complete -C /usr/local/bin/terraform terraform
+
+# To specify environment varialbes per directory using a .envrc file on a directory
+eval "$(direnv hook bash)"

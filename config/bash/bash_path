@@ -30,3 +30,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # llvm
 export PATH="$PATH:/usr/local/opt/llvm/bin"
+
+# golang
+export PATH="$PATH:/usr/local/go/bin"
