@@ -65,6 +65,8 @@ Plug 'junegunn/goyo.vim'
 Plug 'rderik/vim-markdown-toc', { 'branch': 'add-anchors-to-headings/drc2r' }
 " Markdown rendering
 Plug 'plasticboy/vim-markdown'
+" Markdown footnotes
+Plug 'vim-pandoc/vim-markdownfootnotes'
 
 " Browsing - A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
@@ -80,17 +82,11 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'dhruvasagar/vim-table-mode'
 
 "Opens the directory of current file
-Plug 'justinmk/vim-gtfo'
 
 " Defines text objects to target text after the designated characters.
 if v:version >= 703
     Plug 'junegunn/vim-after-object'
 endif
-
-" Tmux integration
-Plug 'benmills/vimux'
-" to run tests (rspec, etc)
-Plug 'skalnik/vim-vroom'
 
 " Languages
 
@@ -276,29 +272,6 @@ else
 endif
 endfunction
 
-" vimux + vroom for test cases running through vimux
-let g:vroom_use_vimux=1
-let g:vroom_use_dispatch=0
-let g:vroom_test_unit_command="ruby -r minitest/pride"
-" vroom defines by default <Leader>r to run test on current file
-" and <leader>R to run nearest test
-" Run the current file with rspec
-map <Leader>rb :call VimuxRunCommand("clear; bundle exec rspec " . bufname("%"))<CR>
-map <Leader>rt :call VimuxRunCommand("bundle exec rspec " . bufname("%") . ":" . line('.'))<CR>
-" Prompt for a command to run
-map <Leader>vp :VimuxPromptCommand<CR>
-" Run last command executed by VimuxRunCommand
-map <Leader>vl :VimuxRunLastCommand<CR>
-" Inspect runner pane
-map <Leader>vi :VimuxInspectRunner<CR>
-" Close vim tmux runner opened by VimuxRunCommand
-map <Leader>vq :VimuxCloseRunner<CR>
-" Interrupt any command running in the runner pane
-map <Leader>vx :VimuxInterruptRunner<CR>
-" Zoom the runner pane (use <bind-key> z to restore runner pane)
-map <Leader>vz :call VimuxZoomRunner()<CR>
-" Send keys to Pane
-map <Leader>vd :call VimuxSendKeys("C-d")<CR>
 "Goyo configuration 
 map <Leader>g :Goyo<CR>
 
@@ -331,16 +304,6 @@ let g:tagbar_type_go = {
       \ 'ctagsbin'  : 'gotags',
       \ 'ctagsargs' : '-sort -silent'
       \ }
-" Send command to run current File for test
-"map <LeadeR>vrt :call VroomRunTestFile()
-function! VimuxSlime()
-call VimuxSendText(@v)
-call VimuxSendKeys("Enter")
-endfunction
-" If text is selected, save it in the v buffer and send that buffer it to tmux
-vmap <LocalLeader>vs "vy :call VimuxSlime()<CR>
-" Select current paragraph and send it to tmux
-nmap <LocalLeader>vs vip<LocalLeader>vs<CR>
 
 " follow UTL link
 nmap <LocalLeader>gt :Utl<CR>
