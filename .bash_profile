@@ -20,6 +20,9 @@ set -o vi
 #allow to cd to bash variables
 shopt -s cdable_vars
 
+#hist verify
+shopt -s histverify
+
 #set up for fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
