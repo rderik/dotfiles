@@ -21,7 +21,7 @@ set -o vi
 shopt -s cdable_vars
 
 #hist verify
-shopt -s histverify
+#shopt -s histverify
 
 #set up for fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -32,3 +32,8 @@ for file in ~/.config/bash/bash_{path,prompt,exports,aliases,extra,private}; do
   [ -r "$file" ] && source "$file"
 done
 unset file
+
+# dircolors
+if command -v dircolors &> /dev/null; then
+  eval $(dircolors ~/.dircolors)
+fi
