@@ -176,7 +176,8 @@ runtime macros/matchit.vim
 "let ayucolor="light"  " for light version of theme
 let ayucolor="mirage" " for mirage version of theme
 "let ayucolor="dark"   " for dark version of theme
-colorscheme thankful_eyes
+colorscheme dracula
+set term=xterm-256color
 
 let mapleader = "\\"
 let maplocalleader = "\\"
