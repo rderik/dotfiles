@@ -14,14 +14,6 @@ silent_background() {
 }
 
 
-#Nodenv version manager
-#eval "$(nodenv init -)"
-nodenv() {
-  unset -f nodenv
-  eval "$(nodenv init -)"
-  nodenv $@
-}
-
 # RBENV configuration
 export PATH="$HOME/.rbenv/bin:$PATH"
 #eval "$(rbenv init -)"
@@ -90,3 +82,7 @@ complete -C /usr/local/bin/terraform terraform
 
 # To specify environment varialbes per directory using a .envrc file on a directory
 eval "$(direnv hook bash)"
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
