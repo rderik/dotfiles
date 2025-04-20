@@ -81,6 +81,12 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 "Vim Tables
 Plug 'dhruvasagar/vim-table-mode'
 
+"VimWiki
+Plug 'vimwiki/vimwiki'
+
+"Calendar
+Plug 'mattn/calendar-vim'
+
 "Opens the directory of current file
 
 " Defines text objects to target text after the designated characters.
