@@ -68,9 +68,6 @@ Plug 'plasticboy/vim-markdown'
 " Markdown footnotes
 Plug 'vim-pandoc/vim-markdownfootnotes'
 
-" Browsing - A vim plugin to display the indention levels with thin vertical lines
-Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
-
 " Nerd Tree to view files
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Nerd Commenter
@@ -81,11 +78,17 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 "Vim Tables
 Plug 'dhruvasagar/vim-table-mode'
 
-"VimWiki
+" VimWiki
 Plug 'vimwiki/vimwiki'
 
 "Calendar
 Plug 'mattn/calendar-vim'
+
+" Startup time profiler
+Plug 'tweekmonster/startuptime.vim'
+
+" Indent movement
+Plug 'jessekelighine/vindent.vim'
 
 "Opens the directory of current file
 
@@ -151,6 +154,7 @@ Plug 'vim-scripts/nginx.vim'
 
 "Snippets
 Plug 'honza/vim-snippets'
+
 
 " All of your Plugins must be added before the following line
 call plug#end()            " required
@@ -340,6 +344,22 @@ let g:vim_markdown_folding_disabled = 1
 let g:coc_global_extensions = ["coc-snippets"]
 " Snippet
 imap <LocalLeader><Tab> <Plug>(coc-snippets-expand)
+
+" Vindent
+let g:vindent_motion_OO_prev   = '[=' " jump to prev block of same indent.
+let g:vindent_motion_OO_next   = ']=' " jump to next block of same indent.
+let g:vindent_motion_more_prev = '[+' " jump to prev line with more indent.
+let g:vindent_motion_more_next = ']+' " jump to next line with more indent.
+let g:vindent_motion_less_prev = '[-' " jump to prev line with less indent.
+let g:vindent_motion_less_next = ']-' " jump to next line with less indent.
+let g:vindent_motion_diff_prev = '[;' " jump to prev line with different indent.
+let g:vindent_motion_diff_next = '];' " jump to next line with different indent.
+let g:vindent_motion_XX_ss     = '[p' " jump to start of the current block scope.
+let g:vindent_motion_XX_se     = ']p' " jump to end   of the current block scope.
+let g:vindent_object_XX_ii     = 'ii' " select current block.
+let g:vindent_object_XX_ai     = 'ai' " select current block + one extra line  at beginning.
+let g:vindent_object_XX_aI     = 'aI' " select current block + two extra lines at beginning and end.
+let g:vindent_jumps            = 1    " make vindent motion count as a |jump-motion| (works with |jumplist|).
 
 "}}}
 
