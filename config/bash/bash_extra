@@ -86,3 +86,6 @@ eval "$(direnv hook bash)"
 # NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+eval "$(kind completion bash)"
+eval "$(kubectl completion bash)"
