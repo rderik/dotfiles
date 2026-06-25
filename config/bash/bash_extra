@@ -81,11 +81,11 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 complete -C /usr/local/bin/terraform terraform
 
 # To specify environment varialbes per directory using a .envrc file on a directory
-eval "$(direnv hook bash)"
+command -v direnv &>/dev/null && eval "$(direnv hook bash)"
 
 # NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-eval "$(kind completion bash)"
-eval "$(kubectl completion bash)"
+command -v kind &>/dev/null && eval "$(kind completion bash)"
+command -v kubectl &>/dev/null && eval "$(kubectl completion bash)"

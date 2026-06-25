@@ -1,5 +1,8 @@
 # vi: set ft=sh :
 
+# user-local binaries
+export PATH="$HOME/.local/bin:$PATH"
+
 # Bison
 export PATH="/usr/local/opt/bison/bin:$PATH"
 
