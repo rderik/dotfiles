@@ -83,10 +83,5 @@ command -v terraform &>/dev/null && complete -C "$(command -v terraform)" terraf
 # To specify environment varialbes per directory using a .envrc file on a directory
 command -v direnv &>/dev/null && eval "$(direnv hook bash)"
 
-# NVM (installed via Homebrew)
-export NVM_DIR="$HOME/.nvm"
-[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
-[ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
-
 command -v kind &>/dev/null && eval "$(kind completion bash)"
 command -v kubectl &>/dev/null && eval "$(kubectl completion bash)"
