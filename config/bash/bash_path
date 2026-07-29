@@ -1,26 +1,33 @@
 # vi: set ft=sh :
 
+# Homebrew (sets HOMEBREW_PREFIX and puts brew's bin/sbin on PATH)
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # user-local binaries
 export PATH="$HOME/.local/bin:$PATH"
 
 # Bison
-export PATH="/usr/local/opt/bison/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/bison/bin:$PATH"
 
 # Add yarn npm local modules
 export PATH="$PATH:./node_modules/.bin"
 
 # ICU includes
-export PATH="$PATH:/usr/local/opt/icu4c/sbin"
-export PATH="$PATH:/usr/local/opt/icu4c/bin"
+export PATH="$PATH:$HOMEBREW_PREFIX/opt/icu4c/sbin"
+export PATH="$PATH:$HOMEBREW_PREFIX/opt/icu4c/bin"
 
 # SQLite
-export PATH="/usr/local/opt/sqlite/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/sqlite/bin:$PATH"
 
 # Fastlane
 export PATH="$HOME/.fastlane/bin:$PATH"
 
 # Flex
-export PATH="/usr/local/opt/flex/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/flex/bin:$PATH"
 
 # custom scripts
 export PATH="$HOME/.config/bin:$PATH"
@@ -32,7 +39,7 @@ export PATH="${R2PM_BINDIR}:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # llvm
-export PATH="$PATH:/usr/local/opt/llvm/bin"
+export PATH="$PATH:$HOMEBREW_PREFIX/opt/llvm/bin"
 
-# golang
+# golang (official installer, fixed path regardless of arch/brew)
 export PATH="$PATH:/usr/local/go/bin"

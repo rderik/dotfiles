@@ -47,15 +47,15 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 fi
 
 #imagemagick dirty fixes TODO: remove when possible
-export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/imagemagick@6/lib"
-export CPPFLAGS="-I/usr/local/opt/imagemagick@6/include"
-export PKG_CONFIG_PATH="/usr/local/opt/imagemagick@6/lib/pkgconfig"
+export PATH="$HOMEBREW_PREFIX/opt/imagemagick@6/bin:$PATH"
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/imagemagick@6/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/imagemagick@6/include"
+export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/imagemagick@6/lib/pkgconfig"
 
 #More trash for MySQL
-export PATH="/usr/local/opt/mysql@5.6/bin:$PATH"
-export LDFLAGS="-L/usr/local/opt/mysql@5.6/lib"
-export CPPFLAGS="-I/usr/local/opt/mysql@5.6/include"
+export PATH="$HOMEBREW_PREFIX/opt/mysql@5.6/bin:$PATH"
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/mysql@5.6/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/mysql@5.6/include"
 
 
 # jenv to manage Java Versions
@@ -78,14 +78,15 @@ pyenv() {
 export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 # Add terraform autocomplete
-complete -C /usr/local/bin/terraform terraform
+command -v terraform &>/dev/null && complete -C "$(command -v terraform)" terraform
 
 # To specify environment varialbes per directory using a .envrc file on a directory
 command -v direnv &>/dev/null && eval "$(direnv hook bash)"
 
-# NVM
+# NVM (installed via Homebrew)
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+[ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
 
 command -v kind &>/dev/null && eval "$(kind completion bash)"
 command -v kubectl &>/dev/null && eval "$(kubectl completion bash)"

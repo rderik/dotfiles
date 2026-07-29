@@ -21,26 +21,26 @@ export PATH="$PATH:/Applications/DevDesktop/tools"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 #PostgreSQL
-export PGDATA='/usr/local/var/postgres'
+export PGDATA="$HOMEBREW_PREFIX/var/postgres"
 
 # Save and reload the history after each command finishes
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 #For compilers to find ICU
-export LDFLAGS="-L/usr/local/opt/icu4c/lib"
-export CPPFLAGS="-I/usr/local/opt/icu4c/include"
+export LDFLAGS="-L$HOMEBREW_PREFIX/opt/icu4c/lib"
+export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/icu4c/include"
 
 #For compilers to find flex
-#export LDFLAGS="-L/usr/local/opt/flex/lib"
-#export CPPFLAGS="-I/usr/local/opt/flex/include"
+#export LDFLAGS="-L$HOMEBREW_PREFIX/opt/flex/lib"
+#export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/flex/include"
 
 
 #For compilers to find bison
-#export LDFLAGS="-L/usr/local/opt/bison/lib"
+#export LDFLAGS="-L$HOMEBREW_PREFIX/opt/bison/lib"
 
 
 #For pkg-config to find icu4c you may need to set
-export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig"
+export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/icu4c/lib/pkgconfig"
 
 #radare2
 export R2PM_PLUGDIR="/Users/derik/.local/share/radare2/plugins"
