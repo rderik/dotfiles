@@ -3,7 +3,6 @@
 " vim: foldmethod=marker
 
 set nocompatible
-let s:darwin = has('mac')
 
 " Plug section {{{
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
@@ -113,7 +112,6 @@ Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'vim-ruby/vim-ruby'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rake'
-Plug 'tpope/vim-dispatch'
 " Rails
 Plug 'tpope/vim-rails'
 " TypeScript
@@ -132,8 +130,6 @@ Plug 'rderik/potion'
 Plug 'dag/vim-fish'
 " Vapor Leaf templating language
 Plug 'vapor-community/vim-leaf'
-" Vim LSP related :CocConfig to open configuration file
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Twig template system for PHP
@@ -151,9 +147,6 @@ Plug 'mattn/emmet-vim'
 
 " Nginx syntax
 Plug 'vim-scripts/nginx.vim'
-
-"Snippets
-Plug 'honza/vim-snippets'
 
 
 " All of your Plugins must be added before the following line
@@ -215,8 +208,6 @@ let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
-" This will split only under the current window.
-let g:fzf_layout = { 'window': '10 split | enew'}
 " Default fzf layout
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~40%' }
@@ -242,17 +233,6 @@ let g:rustfmt_autosave = 1
 let g:session_autosave = 'no'
 
 
-
-"Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 0
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-nnoremap <leader>sy :SyntasticToggleMode<CR>
 
 "Table mode
 let g:table_mode_header_fillchar='='
@@ -340,10 +320,6 @@ let g:vmt_auto_update_on_save = 1
 let g:vim_markdown_conceal=2
 let g:vim_markdown_conceal_code_blocks = 1
 let g:vim_markdown_folding_disabled = 1
-
-let g:coc_global_extensions = ["coc-snippets"]
-" Snippet
-imap <LocalLeader><Tab> <Plug>(coc-snippets-expand)
 
 " Vindent
 let g:vindent_motion_OO_prev   = '[=' " jump to prev block of same indent.
@@ -467,16 +443,16 @@ set tags=./tags
 set tags^=./.git/tags;
 " shows row and column number at bottom right corner
 set ruler
-" fix to use clipboard on tmux
-set clipboard=unnamed
 set hlsearch
-filetype plugin indent on
 
-" Annoying temporary files
-set backupdir=/tmp//,.
-set directory=/tmp//,.
+" Persist backup/swap/undo files under ~/.vim instead of /tmp, and keep undo
+" history across sessions (falls back to the file's own directory if the
+" first path doesn't exist/isn't writable).
+set backupdir=~/.vim/backup//,.
+set directory=~/.vim/swap//,.
 if v:version >= 703
-  set undodir=/tmp//,.
+  set undodir=~/.vim/undo//,.
+  set undofile
 endif
 
 " %< Where to truncate
