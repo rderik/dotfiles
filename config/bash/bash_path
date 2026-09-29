@@ -41,5 +41,3 @@ export PATH="$HOME/.cargo/bin:$PATH"
 # llvm
 export PATH="$PATH:$HOMEBREW_PREFIX/opt/llvm/bin"
 
-# golang (official installer, fixed path regardless of arch/brew)
-export PATH="$PATH:/usr/local/go/bin"
